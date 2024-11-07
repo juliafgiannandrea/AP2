@@ -1,0 +1,4 @@
+#Versões das bibliotecas que estou utilizando: 
+streamlit == 1.16.0
+matplotlib == 3.9.2
+pandas==2.2.3
