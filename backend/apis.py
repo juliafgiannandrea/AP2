@@ -45,8 +45,8 @@ def pegarPlanilhao(data):
         print(f"Erro técnico {e}")
 
     
-
 #pegarPlanilhao('2023-04-03') #exemplo de uso da função 
+
 
 #Para pegar a api do preço corrigido: 
 def get_preco_corrigido(ticker, data_ini, data_fim):

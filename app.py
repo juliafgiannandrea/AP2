@@ -1,3 +1,4 @@
+#Importação das bibliotecas
 import matplotlib.pyplot as plt
 import sys
 import os 
@@ -11,8 +12,7 @@ BASE_DIR = Path(__file__).parent.parent.resolve()
 sys.path.append(str(BASE_DIR))
 
 
-
-# Importando as funções de renderização
+# Importando as funções de renderização (exibição - frontend)
 from frontend.planilhao_page import render_planilhao
 from frontend.estrategia_page import render_estrategia
 from frontend.grafico_page import render_grafico
@@ -24,8 +24,8 @@ st.title("AP2 - PROJETOS EM CIÊNCIA DE DADOS I")
 
 # Definindo as páginas do app
 pages = {
-    "PLANILHAO": render_planilhao,
-    "ESTRATEGIA": render_estrategia,
+    "PLANILHÃO": render_planilhao,
+    "ESTRATÉGIA": render_estrategia,
     "GRÁFICOS": render_grafico,
     "DOCUMENTAÇÃO": render_doc
 }

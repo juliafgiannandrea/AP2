@@ -1,9 +1,10 @@
+#Frontend da aba DOCUMTENTAÇÃO: 
+
+#Importação das bibliotecas:
 import streamlit as st
 import pandas as pd
-from backend.views import pegar_df_planilhao
-from backend.routes import menu_planilhao, menu_estrategia
 
-
+#textos explicativos: 
 def render_doc():
     st.subheader("""
                  Uma aplicação para gerenciar e visualizar dados financeiros de forma simples e intuitiva.
