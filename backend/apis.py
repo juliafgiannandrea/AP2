@@ -78,10 +78,9 @@ def get_preco_corrigido(ticker, data_ini, data_fim):
             print(f"Erro no acesso ao Preço Corrigido {ticker}")
     except Exception as e:
         logger.error(f"Erro técnico{e}")
+    return preco_corrigido
 
-
-#get_preco_corrigido('PETR4', '2023-01-01', '2023-01-31' ) #exemplo de uso da função para pegar preço corrigido
-
+get_preco_corrigido('PETR4', '2023-01-01', '2023-01-31' ) #exemplo de uso da função para pegar preço corrigido
 
 
 #Calcular o IBOVESPA do período: ticker = ibov 

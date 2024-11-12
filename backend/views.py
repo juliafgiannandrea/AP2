@@ -142,11 +142,9 @@ def carteira(data, indicador_rent, indicador_desc, num):
     #novo data frame apenas com os nomes das ações já rankeadas: 
     df_final = df_sorted['ticker']
     
-    #return acoes_carteira
     return df_final
     
     
-
 
 #quero puxar a variável acoes_carteira da função acima para ela entrar como parametro da minha função abaixo   
 
@@ -168,8 +166,7 @@ def pegar_df_preco_corrigido(data_ini, data_fim, acoes_carteira) -> pd.DataFrame
     for ticker in acoes_carteira:
         print(ticker)
         dados = get_preco_corrigido(ticker, data_ini, data_fim) #para cada ação presente na carteira gerada acima eu execito a função get_preco_corrigido, que é a função que pega a API
-        
-        print(dados)
+       
         if dados and 'dados' in dados: 
             df_temp = pd.DataFrame.from_dict(dados['dados'])  # Converte os dados num df temporário
             df_preco = pd.concat([df_preco, df_temp], axis=0, ignore_index=True) #não entendi do porque criar um data frame temporário e depois concatená-lo. 
@@ -187,16 +184,16 @@ def pegar_df_preco_corrigido(data_ini, data_fim, acoes_carteira) -> pd.DataFrame
 
     #somar todos os valores de fechamento de cada ação num mesmo dia --- vou ter valores de fechamento da carteira no dia 
     df_preco_grouped = df_preco.groupby("data")["fechamento"].sum().reset_index()
-
+       
     # Criar o gráfico com os valores do fechamento somados 
     plt.figure(figsize=(10, 7))
-    plt.plot(df_preco_grouped['data'], df_preco_grouped['fechamento'], marker='o', linestyle='-', color='black', label='Fechamento')
+    plt.plot(df_preco_grouped['data'], df_preco_grouped['fechamento'], linestyle='-', color='black', label='Fechamento')
 
     # Personalização do gráfico
     plt.title('Soma do Fechamento da Carteira de Ações por Data')
     plt.xlabel('Data')
     plt.ylabel('Soma do Preço de Fechamento da Carteira de Ações')
-    plt.xticks(rotation=45)  # Rotaciona as datas para melhor visualização
+    #plt.xticks(rotation=45)  # Rotaciona as datas para melhor visualização
     plt.grid(True)
     plt.legend()
 
@@ -211,19 +208,8 @@ def pegar_df_preco_corrigido(data_ini, data_fim, acoes_carteira) -> pd.DataFrame
     #return df_preco #data frame de cada dia das ações indiviuais com seus valores de fechamento
 
 
-
-
-#testes: dando os parametros para rodar as funções 
-#pegar_df_planilhao("2023-04-03")
-#pegar_df_preco_corrigido('2024-01-04', '2024-11-04',  ['VBBR3', 'WIZC3', 'RSUL4', 'CMIN3', 'PRIO3', 'CAMB3', 'KEPL3', 'SYNE3', 'LEVE3', 'VALE3'])
-#carteira('2024-10-04', 'roic', 'earning_yield', 10)
-
-
-#da para adaptar essa função: 
-
 #preços diversos é uma tabela utilizada para análise do ibovespa:
-
-def pegar_df_preco_diversos(data_ini:date, data_fim:date, acoes_carteira:list) -> pd.DataFrame:
+def pegar_df_preco_diversos(data_ini:date, data_fim:date) -> pd.DataFrame:
     """
     Consulta os preços históricos de uma carteira de ativos
 
@@ -231,30 +217,30 @@ def pegar_df_preco_diversos(data_ini:date, data_fim:date, acoes_carteira:list) -
 
     data_ini (date): data inicial da consulta
     data_fim (date): data final da consulta
-    acoes_carteira (list): lista de ativos a serem consultados
 
     return:
     df_preco (pd.DataFrame): dataframe com os preços do período dos ativos da lista
     """
-    acoes_carteira = ['ibov']
 
     df_preco = pd.DataFrame()
-    for ticker in acoes_carteira:
-        dados = get_preco_diversos(data_ini, data_fim, ticker)
-        if dados:
-            dados = dados['dados']
-            df_temp = pd.DataFrame.from_dict(dados)
-            df_preco = pd.concat([df_preco, df_temp], axis=0, ignore_index=True)
-            logger.info(f'{ticker} finalizado!')
-            print(f'{ticker} finalizado!')   
-        else:
-            logger.error(f"Sem Preco Corrigido: {ticker}")
-            print(f"Sem Preco Corrigido: {ticker}")
+    dados = get_preco_diversos(data_ini, data_fim, 'ibov')
+    if dados:
+        dados = dados['dados']
+        df_temp = pd.DataFrame.from_dict(dados)
+        df_preco = pd.concat([df_preco, df_temp], axis=0, ignore_index=True)
+        logger.info('ibov finalizado!')
+        print('ibov finalizado!')   
+    else:
+        logger.error("Sem Preco Corrigido: ibov")
+        print("Sem Preco Corrigido: ibov")
+    
 
-
+    df_preco['data'] = pd.to_datetime(df_preco['data'])
+    
+    #Criação do gráfico: 
 
     plt.figure(figsize=(10, 7))
-    plt.plot(df_preco['data'], df_preco['fechamento'], marker='o', linestyle='-', color='black', label='Fechamento')
+    plt.plot(df_preco['data'], df_preco['fechamento'], linestyle='-', color='black', label='Fechamento')
 
     # Personalização do gráfico
     plt.title('Fechamento do Ibovespa por Data')
@@ -272,14 +258,38 @@ def pegar_df_preco_diversos(data_ini:date, data_fim:date, acoes_carteira:list) -
     return df_preco
 
 
+#Para fazer o gráfico conjunto 
+def comp_ibov_carteira(data_ini:date, data_fim:date, df_carteira, df_ibov):  
+     
+    plt.figure(figsize=(10, 7))
+    plt.plot(df_carteira['data'], df_carteira['fechamento'], label='Carteira')
+    plt.plot(df_ibov['data'], df_ibov['fechamento'], label = 'Ibovespa')
+
+    # Personalização do gráfico
+    plt.title('Fechamento do Ibovespa por Data')
+    plt.xlabel('Data')
+    plt.ylabel('Valores de Fechamento')
+    plt.grid(True)
+    plt.legend()
+
+    # Ajustar o layout do gráfico
+    plt.tight_layout()  
+
+    plt.show()
+    st.pyplot(plt)
+
+
+
+#testes: dando os parametros para rodar as funções 
+
+#pegar_df_planilhao("2023-04-03")
+#pegar_df_preco_corrigido('2024-01-04', '2024-11-04',  ['VBBR3', 'WIZC3'])
+#carteira('2024-10-04', 'roic', 'earning_yield', 10)
+#pegar_df_preco_diversos('2024-01-04', '2024-11-04')
 
 
 
 
-
-
-
-pegar_df_preco_diversos('2024-01-04', '2024-11-04', ['VBBR3', 'WIZC3', 'RSUL4', 'CMIN3', 'PRIO3'] )
 
 #colocar uma restrição pra data final não poder ser menor que a inicial 
 
