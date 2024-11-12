@@ -80,7 +80,27 @@ def get_preco_corrigido(ticker, data_ini, data_fim):
         logger.error(f"Erro técnico{e}")
 
 
-get_preco_corrigido('PETR4', '2023-01-01', '2023-01-31' ) #exemplo de uso da função para pegar preço corrigido
+#get_preco_corrigido('PETR4', '2023-01-01', '2023-01-31' ) #exemplo de uso da função para pegar preço corrigido
 
 
 
+#Calcular o IBOVESPA do período: ticker = ibov 
+
+def get_preco_diversos(data_ini, data_fim, ticker):
+    params_ibov = {'ticker': {ticker}, 
+'data_ini': {data_ini},
+'data_fim': {data_fim} }
+    try:
+        ibovespa = requests.get('https://laboratoriodefinancas.com/api/v1/preco-diversos', params=params_ibov, headers=headers)
+        if ibovespa.status_code == 200:
+            response_ibov = ibovespa.json() 
+            logger.info(f"API acessada com sucesso: {ticker}")
+            print(f"API acessada com sucesso: {ticker}")
+            return(response_ibov)
+        else:
+            logger.warning(f"Não foi possível acessar a API {ticker}")
+            print(f"Erro no acesso ao Preço Diversos {ticker}")
+    except Exception as e:
+        logger.error(f"Erro técnico{e}")
+
+get_preco_diversos('2023-01-01', '2023-01-31', 'ibov')
