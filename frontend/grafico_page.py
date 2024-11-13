@@ -22,9 +22,9 @@ def render_grafico():
     acoes_carteira = st.session_state.acoes_carteira  # Pega a carteira de ações
     
     #Inputs das datas 
-    data_ini = st.date_input("Selecione uma data", value=pd.to_datetime('today'),key="data_inicio") #today como valor padrão
+    data_ini = st.date_input("Selecione uma data de início", value=pd.to_datetime('today'),key="data_inicio") #today como valor padrão
        
-    data_fim = st.date_input("Selecione uma data", value=pd.to_datetime('today'), key="data_fim") #today como valor padrão
+    data_fim = st.date_input("Selecione uma data de fim", value=pd.to_datetime('today'), key="data_fim") #today como valor padrão
     
     validar_data(data_ini)
     validar_data(data_fim)
