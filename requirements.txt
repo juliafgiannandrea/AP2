@@ -1,4 +1,5 @@
 #Versões das bibliotecas que estou utilizando: 
-streamlit == 1.16.0
+streamlit==1.39.0
 matplotlib == 3.9.2
 pandas==2.2.3
+python-dotenv==1.0.1

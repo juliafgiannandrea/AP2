@@ -46,7 +46,16 @@ Quanto mais alto for o ROE, mais eficiente a empresa será. Mas atenção, o ROE
 """)
     
     st.subheader("ROIC")
+    st.write(
+        """"
+O ROIC significa "Return on Invested Capital" (Retorno sobre o Capital Investido) e é um indicador financeiro que avalia a eficiência e a lucratividade do uso do capital por uma empresa. Essa métrica é importante para entender se uma empresa está usando seus recursos de maneira eficiente, sendo um indicador significativo da saúde financeira geral. 
+Quanto maior o índice, mais eficientes são os investimentos da empresa, refletindo um retorno mais significativo sobre o capital investido. 
+Vale ressaltar que é importante comparar o ROIC com outros indicadores financeiros para uma análise completa do desempenho da empresa.
+ """ )
+
     st.subheader("ROC")
+    st.write("""O indicador ROC (Rate of Change) é um instrumento que mostra em termos percentuais a diferença entre o preço atual e o preço de alguns períodos anteriores. Em diferentes tipos de análise, o mesmo atua tanto o oscilador que confirma o movimento tendencial, como também um indicador de tendência.
+""")
 
     st.subheader("DE DESCONTO: ")
 
@@ -90,6 +99,10 @@ https://blog.pagseguro.uol.com.br/p-vp/
 https://blog.toroinvestimentos.com.br/bolsa/earnings-yield/
              
 https://laboratoriodefinancas.com/home
+             
+https://www.nordinvestimentos.com.br/blog/roic/
+             
+https://www.litefinance.org/pt/blog/for-beginners/melhores-indicadores-para-forex/indicador-roc
 
 """ 
     )

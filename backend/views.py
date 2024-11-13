@@ -280,6 +280,23 @@ def comp_ibov_carteira(data_ini:date, data_fim:date, df_carteira, df_ibov):
 
 
 
+#função para validação de data: não permitir que seja selecionado o dia de hoje nem finais de semana:
+def validar_data(data):
+        if data == pd.to_datetime('today').date():
+            st.error("A data não pode ser o dia de hoje.")
+        elif data.weekday() in [5, 6]:  # 5 = Sábado, 6 = Domingo
+            st.error("Sábados e domingos não são permitidos.")
+        elif data == pd.to_datetime('today').date():
+            st.error("Datas futuras não são permitidas.")
+        else:
+            st.success(f"Você selecionou uma data válida: {data}")
+
+
+
+
+
+
+
 #testes: dando os parametros para rodar as funções 
 
 #pegar_df_planilhao("2023-04-03")

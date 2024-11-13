@@ -5,8 +5,11 @@ import streamlit as st
 import pandas as pd
 
 #Importação das outras funções criadas em outros arquivos: 
-from backend.views import pegar_df_planilhao
+from backend.views import pegar_df_planilhao, validar_data
 from backend.routes import menu_planilhao 
+
+
+
 
 #Estrutura - front
 def render_planilhao():
@@ -16,6 +19,10 @@ def render_planilhao():
 
     #Input de data:
     data_base = st.date_input("Selecione uma data", value=pd.to_datetime('today')) #today como valor padrão
+
+    #garantir que a data selecionada não possa ser o dia de hoje nem sábado e domingo
+    validar_data(data_base)
+
 
     #apertar o botão de busca e executar a função menu_plnaulhão 
     if st.button("Buscar Dados"):

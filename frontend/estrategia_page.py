@@ -6,7 +6,7 @@ import pandas as pd
 
 
 #Importação das outras funções criadas em outros arquivos: 
-from backend.views import pegar_df_planilhao, carteira
+from backend.views import pegar_df_planilhao, carteira, validar_data
 from backend.routes import menu_estrategia
 
 
@@ -22,6 +22,8 @@ def render_estrategia():
     #Input data e quantidade de ações (número) a serem analisadas: 
     data = st.sidebar.date_input("Selecione uma data", value=pd.to_datetime('today'))
     num = st.sidebar.number_input("Quantas ações você quer analisar?", min_value=1, value=10)
+    
+    validar_data(data)
     
     #Buscar os dados:
     if st.sidebar.button("Buscar"):
