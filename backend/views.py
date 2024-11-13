@@ -43,8 +43,7 @@ def pegar_df_planilhao(data_base:date) -> pd.DataFrame:
         print(f"Sem Dados no Planilhão: {data_base}")
 
 
-### Posso passar essa função para o arquivo apis.py???
-
+#pegar_df_planilhao("2023-04-03")
 
 #Usar algum parâmetro (no geral - o volume) para remover as ações que tem as 3 primeiras letras iguais (são a mesma ação):
 #remover linhas duplicadas baseadas em uma coluna escolhida, priorizando o valor mais alto dessa coluna para manter apenas uma ocorrência de cada empresa
@@ -82,12 +81,6 @@ def filtrar_duplicado(df:pd.DataFrame, meio:str = None) -> pd.DataFrame:
         # ~ é um operador bitwise NOT ---> inverte uma condição booleana === transforma em True os elementos que não estão em lst_dup.
 
 
-
-
-### dar um valor para a quantidade de ações que vc quer pegar 
-
-### !!!!!!! colocar restrição de num (até um valor máximo)
-
 def carteira(data, indicador_rent, indicador_desc, num):
 
     """
@@ -100,54 +93,45 @@ def carteira(data, indicador_rent, indicador_desc, num):
     num: o número que representa a quantidade de ações que vc quer que a carteira gerada tenha 
 
     return:
-    df rankeado das ações com os maiores indicadores conjuntos
-    
+    df_sorted: um data frame com as ações rankeadas de acordo com os maiores indicadores conjuntos 
+    df_top: um data frame com as ações rankeadas e só as colunas dos indicadores
     """
 
-
-
     df = pegar_df_planilhao(data)
-    quero = ["ticker","setor","data_base","roc", "roe", "roic","earning_yield","dividend_yield","p_vp"]
-    df = df[quero]
+    colunas = ["ticker","setor","data_base","roc", "roe", "roic","earning_yield","dividend_yield","p_vp"]
+    df = df[colunas]
+
+    #criar colunas no df que representem sua classificação de acordo com os indicadores
     
-           
     #rentabilidade:
-    df_rent = df.nlargest(300,indicador_rent).reset_index(drop = True) 
-    df_rent['index_rent'] = df_rent.index #coluna index top indicador de rentabilidade
+    df = df.nlargest(300,indicador_rent).reset_index(drop = True) 
+    df['index_rent'] = df.index #coluna index top indicador de rentabilidade
 
     #desconto:
-    df_desc = df.nlargest(300,indicador_desc).reset_index(drop = True)
-    df_desc['index_desc'] = df_desc.index #coluna index top indicador de desconto
-        
-    #juntar os dois data frames somando a coluna index: 
-    df_merged  = pd.merge(df_desc[["ticker", "index_desc"]], 
-                      df_rent[["ticker", "index_rent"]], 
-                      on = "ticker", 
-                      how = "inner")
-    
+    if indicador_desc == 'p_vp': 
+        df = df.nsmallest(300,indicador_desc).reset_index(drop=True) #qto menor o valor de pvp melhor no ranking ele está 
+    else: 
+        df = df.nlargest(300,indicador_desc).reset_index(drop=True)
+    df['index_desc'] = df.index #coluna index top indicador de desconto
+
     #criação da coluna média que é o ranking novo ranking dos dois indicadores em conjunto 
-    df_merged["media"] = df_merged["index_desc"] + df_merged["index_rent"] 
+    df["media"] = df["index_desc"] + df["index_rent"] 
 
     #ordenar a coluna média do menor para o maior 
-    df_sorted = df_merged.sort_values(by=['media'], ascending=[True])
+    df_sorted = df.sort_values(by=['media'], ascending=[True])
 
     #pegar os maiores rankinhgs conjuntos, ou seja as menores médias, da quantidade 'num' informada e a partir disso gerar uma carteira de ações
-
     df_sorted = df_sorted.nsmallest(num,'media').reset_index(drop = True) 
     df_sorted.index = df_sorted.index + 1 #para o ranking comçar no 1 e não no 0
     
     #criar uma lista das ações da carteira gerada: 
-    acoes_carteira = df_sorted['ticker'].tolist()
+    acoes_carteira = df_sorted['ticker'].tolist()  
+    return df_sorted, acoes_carteira
 
-    #novo data frame apenas com os nomes das ações já rankeadas: 
-    df_final = df_sorted['ticker']
-    
-    return df_final
-    
-    
+#carteira('2024-11-05', 'roe', 'earning_yield', 2)
 
-#quero puxar a variável acoes_carteira da função acima para ela entrar como parametro da minha função abaixo   
 
+#quero puxar a variável acoes_carteira da função acima para ela entrar como parametro da minha função abaixo  _ usei o cache 
 def pegar_df_preco_corrigido(data_ini, data_fim, acoes_carteira) -> pd.DataFrame:
     """
     Consulta os preços Corrigidos de uma lista de ações.
@@ -207,6 +191,7 @@ def pegar_df_preco_corrigido(data_ini, data_fim, acoes_carteira) -> pd.DataFrame
     return df_preco_grouped #é um data frame com as datas e os valores da soma do fechamento 
     #return df_preco #data frame de cada dia das ações indiviuais com seus valores de fechamento
 
+#pegar_df_preco_corrigido('2024-01-04', '2024-11-04',  ['VBBR3', 'WIZC3'])
 
 #preços diversos é uma tabela utilizada para análise do ibovespa:
 def pegar_df_preco_diversos(data_ini:date, data_fim:date) -> pd.DataFrame:
@@ -288,26 +273,10 @@ def validar_data(data):
             st.error("Sábados e domingos não são permitidos.")
         elif data == pd.to_datetime('today').date():
             st.error("Datas futuras não são permitidas.")
-        else:
-            st.success(f"Você selecionou uma data válida: {data}")
 
 
 
-
-
-
-
-#testes: dando os parametros para rodar as funções 
-
-#pegar_df_planilhao("2023-04-03")
-#pegar_df_preco_corrigido('2024-01-04', '2024-11-04',  ['VBBR3', 'WIZC3'])
-#carteira('2024-10-04', 'roic', 'earning_yield', 10)
 #pegar_df_preco_diversos('2024-01-04', '2024-11-04')
 
-
-
-
-
-#colocar uma restrição pra data final não poder ser menor que a inicial 
 
 

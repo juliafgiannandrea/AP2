@@ -34,11 +34,11 @@ def pegarPlanilhao(data):
         r = requests.get('https://laboratoriodefinancas.com/api/v1/planilhao',params=params, headers=headers)
         if r.status_code == 200:
             planilhao = r.json()
-            logger.info(f"API acessada com sucesso: {data}")
-            print(f"API acessada com sucesso: {data}")
+            logger.info(f"API do Planilhão acessada com sucesso: {data}")
+            print(f"API do Planilhão acessada com sucesso: {data}")
             return planilhao
         else:
-            logger.warning(f"Não foi possível acessar a API {data}")
+            logger.warning(f"Não foi possível acessar a API do Planilhão {data}")
             print(f"Erro no acesso ao Planilhão {data}")
     except Exception as e:
         logger.error(f"Erro técnico {e}")
@@ -46,7 +46,6 @@ def pegarPlanilhao(data):
 
     
 #pegarPlanilhao('2023-04-03') #exemplo de uso da função 
-
 
 #Para pegar a api do preço corrigido: 
 def get_preco_corrigido(ticker, data_ini, data_fim):

@@ -21,20 +21,21 @@ def render_estrategia():
 
     #Input data e quantidade de ações (número) a serem analisadas: 
     data = st.sidebar.date_input("Selecione uma data", value=pd.to_datetime('today'))
-    num = st.sidebar.number_input("Quantas ações você quer analisar?", min_value=1, value=10)
-    
+    num = st.sidebar.number_input("Quantas ações você quer analisar?", min_value=1, max_value=30, value=5)
     validar_data(data)
     
     #Buscar os dados:
     if st.sidebar.button("Buscar"):
-        acoes_carteira = carteira(data, indicador_rent, indicador_desc, num)  # Gerar a carteira de ações
-        st.session_state.acoes_carteira = acoes_carteira  # Armazenar as ações da carteira no session_state 
+        df_sorted, acoes_carteira = carteira(data, indicador_rent, indicador_desc, num) #gera a carteira de ações 
+        # Armazena no session_state a variável acoes_carteira oriunda da função carteira 
+        st.session_state.acoes_carteira = acoes_carteira
+        st.session_state.df_sorted = df_sorted #armazena df no cache 
         df = menu_estrategia(data, indicador_rent, indicador_desc, num)
-        st.dataframe(df)
-    
-    #texto explicativo para exibição: 
-    st.header("Resultados da Análise")
-    st.subheader(f"Top {num} ações pelo indicador de rentabilidade: '{indicador_rent}' e pelo indicador de desconto '{indicador_desc}' em {data.strftime('%Y-%m-%d')}")
+        st.dataframe(df_sorted)    
+        #texto explicativo para exibição: 
+        st.subheader("Resultados da Análise")
+        st.write(f"Top {num} ações pelo indicador de rentabilidade: '{indicador_rent}' e pelo indicador de desconto '{indicador_desc}' em {data.strftime('%Y-%m-%d')}")
+        st.table(acoes_carteira)
 
 
 

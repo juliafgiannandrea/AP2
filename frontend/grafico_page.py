@@ -23,14 +23,15 @@ def render_grafico():
     
     #Inputs das datas 
     data_ini = st.date_input("Selecione uma data de início", value=pd.to_datetime('today'),key="data_inicio") #today como valor padrão
-       
-    data_fim = st.date_input("Selecione uma data de fim", value=pd.to_datetime('today'), key="data_fim") #today como valor padrão
-    
     validar_data(data_ini)
+
+    data_fim = st.date_input("Selecione uma data de fim", value=pd.to_datetime('today'), key="data_fim") #today como valor padrão
     validar_data(data_fim)
 
-    st.write(f"Variação do valor do fechamento da carteira formada pelas ações: {acoes_carteira}")
-    st.write("Antes de clicar em Gerar Gráficos garanta que você selecionou a opção de visuzalização.")
+    if data_ini > data_fim:
+        st.error("A data de fim deve ser posterior a data de início")
+
+    st.warning("Antes de clicar em Gerar Gráficos selecione a opção de visualização.")
 
    
 #FILTROS INTERATIVOS PARA A VISUALIZAÇÃO DOS GRÁFICOS: 
@@ -44,6 +45,7 @@ def render_grafico():
     if st.button("Gerar Gráficos"):
         if "Carteira de Ações" in graficos_opcoes:
             st.subheader("Carteira de Ações")
+            st.write(f"Variação do valor do fechamento da carteira formada pelas ações: {acoes_carteira}")
             df = menu_graficos(data_ini, data_fim, acoes_carteira)
        
         if "IBOV" in graficos_opcoes:
@@ -56,30 +58,15 @@ def render_grafico():
             df_ibov = pegar_df_preco_diversos(data_ini, data_fim)
             st.subheader("Comparativo: Carteira x IBOV")
             comparativo = comp(data_ini, data_fim, df_carteira, df_ibov)
-
-    else:
-        st.error("Não foi possível obter os dados. Verifique as datas ou ações selecionadas.")
+   
+    #se eu colocar isso aqui ele fica sempre aparecendo essa mensagem de erro
+    #else: 
+     #st.error("Não foi possível obter os dados. Verifique as datas ou ações selecionadas.")
 
 
 
     
    
-    
-
-
-
-
-
-
-    
-
-
-
-
-
-
-
-
  
 #Exibição Ibovespa:       
 
