@@ -161,23 +161,31 @@ def pegar_df_preco_corrigido(data_ini, data_fim, acoes_carteira) -> pd.DataFrame
             print(f"Sem Preço Corrigido: {ticker}")
 
 
-    col_interesse = ['ticker', 'fechamento', 'data'] #são as colunas que vou usar para gerar o gráfico 
+    col_interesse = ['ticker', 'abertura','fechamento', 'data'] #são as colunas que vou usar para gerar o gráfico 
     df_preco['data'] = pd.to_datetime(df_preco['data']) #garantir que a data esteja no formato de data (type)
     df_preco = df_preco[col_interesse]
     #print(df_preco) #nome da ação, valor de fechamento e data 
 
-    #somar todos os valores de fechamento de cada ação num mesmo dia --- vou ter valores de fechamento da carteira no dia 
-    df_preco_grouped = df_preco.groupby("data")["fechamento"].sum().reset_index()
-       
-    # Criar o gráfico com os valores do fechamento somados 
+    #abertura e fechamento para cada dia para ação:
+    abertura_carteira = df_preco["abertura"]
+    fechamento_carteira = df_preco["fechamento"]
+    
+    porc_carteira = (100/(len(acoes_carteira)))/100
+    retorno  = ((fechamento_carteira - abertura_carteira)/abertura_carteira)*porc_carteira
+    df_preco["retorno"] = retorno
+
+    #somar todos os valores de retorno de cada ação num mesmo dia --- vou ter valores de fechamento da carteira no dia 
+    df_preco_grouped = df_preco.groupby("data")["retorno"].sum().reset_index()
+    
+    # Criar o gráfico com os valores de retorno de cada dia da carteira  
     plt.figure(figsize=(10, 7))
-    plt.plot(df_preco_grouped['data'], df_preco_grouped['fechamento'], linestyle='-', color='black', label='Fechamento')
+    plt.plot(df_preco_grouped['data'], df_preco_grouped['retorno'], linestyle='-', color='black', label='Retorno')
 
     # Personalização do gráfico
-    plt.title('Soma do Fechamento da Carteira de Ações por Data')
+    plt.title('Valores de Fechamento da Carteira de Ações por Data')
     plt.xlabel('Data')
-    plt.ylabel('Soma do Preço de Fechamento da Carteira de Ações')
-    #plt.xticks(rotation=45)  # Rotaciona as datas para melhor visualização
+    plt.ylabel('Retorno da Carteira de Ações')
+    plt.xticks(rotation=45)  # Rotaciona as datas para melhor visualização
     plt.grid(True)
     plt.legend()
 
@@ -191,7 +199,7 @@ def pegar_df_preco_corrigido(data_ini, data_fim, acoes_carteira) -> pd.DataFrame
     return df_preco_grouped #é um data frame com as datas e os valores da soma do fechamento 
     #return df_preco #data frame de cada dia das ações indiviuais com seus valores de fechamento
 
-#pegar_df_preco_corrigido('2024-01-04', '2024-11-04',  ['VBBR3', 'WIZC3'])
+pegar_df_preco_corrigido('2024-01-04', '2024-01-10',  ['VBBR3', 'WIZC3'])
 
 #preços diversos é uma tabela utilizada para análise do ibovespa:
 def pegar_df_preco_diversos(data_ini:date, data_fim:date) -> pd.DataFrame:
@@ -218,21 +226,25 @@ def pegar_df_preco_diversos(data_ini:date, data_fim:date) -> pd.DataFrame:
     else:
         logger.error("Sem Preco Corrigido: ibov")
         print("Sem Preco Corrigido: ibov")
-    
 
     df_preco['data'] = pd.to_datetime(df_preco['data'])
-    
+    ibov_abertura = df_preco["abertura"]
+    ibov_fechamento = df_preco["fechamento"]
+    retorno_ibov = ((ibov_fechamento - ibov_abertura)/ibov_abertura)
+    df_preco["retorno"] = retorno_ibov
+       
     #Criação do gráfico: 
 
     plt.figure(figsize=(10, 7))
-    plt.plot(df_preco['data'], df_preco['fechamento'], linestyle='-', color='black', label='Fechamento')
+    plt.plot(df_preco['data'], df_preco['retorno'], linestyle='-', color='black', label='Retorno')
 
     # Personalização do gráfico
-    plt.title('Fechamento do Ibovespa por Data')
+    plt.title('Retorno do Ibovespa por Data')
     plt.xlabel('Data')
-    plt.ylabel('Valores de Fechamento do Ibovespa')
+    plt.ylabel('Valores de Retorno do Ibovespa')
     plt.grid(True)
     plt.legend()
+    plt.xticks(rotation=45)
 
     # Ajustar o layout do gráfico
     plt.tight_layout()  
@@ -242,18 +254,19 @@ def pegar_df_preco_diversos(data_ini:date, data_fim:date) -> pd.DataFrame:
 
     return df_preco
 
+pegar_df_preco_diversos('2024-01-04', '2024-01-10')
 
 #Para fazer o gráfico conjunto 
 def comp_ibov_carteira(data_ini:date, data_fim:date, df_carteira, df_ibov):  
      
     plt.figure(figsize=(10, 7))
-    plt.plot(df_carteira['data'], df_carteira['fechamento'], label='Carteira')
-    plt.plot(df_ibov['data'], df_ibov['fechamento'], label = 'Ibovespa')
+    plt.plot(df_carteira['data'], df_carteira['retorno'], label='Carteira')
+    plt.plot(df_ibov['data'], df_ibov['retorno'], label = 'Ibovespa')
 
     # Personalização do gráfico
-    plt.title('Fechamento do Ibovespa por Data')
+    plt.title('Retorno da Carteira de Ações X Ibovespa por Data')
     plt.xlabel('Data')
-    plt.ylabel('Valores de Fechamento')
+    plt.ylabel('Retorno')
     plt.grid(True)
     plt.legend()
 
@@ -262,6 +275,7 @@ def comp_ibov_carteira(data_ini:date, data_fim:date, df_carteira, df_ibov):
 
     plt.show()
     st.pyplot(plt)
+
 
 
 
@@ -276,7 +290,7 @@ def validar_data(data):
 
 
 
-#pegar_df_preco_diversos('2024-01-04', '2024-11-04')
+
 
 
 

@@ -3,6 +3,7 @@
 #Importação das bibliotecas: 
 import requests
 import pandas as pd 
+import os
 
 #Logging:
 import logging
@@ -11,6 +12,8 @@ logger = logging.getLogger(__name__)
 #Carregar variáveis de ambiente a partir de um arquivo .env para o ambiente de execução do Python, usando a biblioteca python-dotenv 
 from dotenv import load_dotenv
 load_dotenv()
+
+#token = os.getenv('TOKEN')
 
 #token de acesso lab das finanças: COLOCAR NO .ENV 
 token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzMyNDQ4MDcyLCJqdGkiOiI5YjBlZjFmMzY4MTk0OGUzYjU3ZGM1ZGU3YmI5YTQ4YyIsInVzZXJfaWQiOjM5fQ.xaDuWahZonD9C0v-4zKLk6CEtNg9s8Ohp9hhoLU3qwA"
