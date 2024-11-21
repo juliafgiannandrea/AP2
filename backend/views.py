@@ -110,38 +110,44 @@ def carteira(data, indicador_rent, indicador_desc, num):
     acoes_carteira (list): lista com as ações do df_sorted (ou seja, da carteira gerada)
 
     """
+    try:
+        df = pegar_df_planilhao(data)
+        colunas = ["ticker","setor","data_base","roc", "roe", "roic","earning_yield","dividend_yield","p_vp"]
+        df = df[colunas]
 
-    df = pegar_df_planilhao(data)
-    colunas = ["ticker","setor","data_base","roc", "roe", "roic","earning_yield","dividend_yield","p_vp"]
-    df = df[colunas]
-
-    #criar colunas no df que representem sua classificação de acordo com os indicadores
+        #criar colunas no df que representem sua classificação de acordo com os indicadores
     
-    #rentabilidade:
-    df = df.nlargest(len(df),indicador_rent).reset_index(drop = True) 
-    df['index_rent'] = df.index #coluna index top indicador de rentabilidade
+        #rentabilidade:
+        df = df.nlargest(len(df),indicador_rent).reset_index(drop = True) 
+        df['index_rent'] = df.index #coluna index top indicador de rentabilidade
 
-    #desconto:
-    if indicador_desc == 'p_vp': 
-        df = df.nsmallest(len(df),indicador_desc).reset_index(drop=True) #qto menor o valor de pvp melhor no ranking ele está 
-    else: 
-        df = df.nlargest(len(df),indicador_desc).reset_index(drop=True)
-    df['index_desc'] = df.index #coluna index top indicador de desconto
+        #desconto:
+        if indicador_desc == 'p_vp': 
+            df = df.nsmallest(len(df),indicador_desc).reset_index(drop=True) #qto menor o valor de pvp melhor no ranking ele está 
+        else: 
+            df = df.nlargest(len(df),indicador_desc).reset_index(drop=True)
+        df['index_desc'] = df.index #coluna index top indicador de desconto
+        logger.debug("Classificação de rentabilidade realizada.")
+        #criação da coluna média que é o ranking novo ranking dos dois indicadores em conjunto 
+        df["media"] = df["index_desc"] + df["index_rent"] 
+        logger.debug("Coluna média criada.")
+        #ordenar a coluna média do menor para o maior 
+        df_sorted = df.sort_values(by=['media'], ascending=[True])
 
-    #criação da coluna média que é o ranking novo ranking dos dois indicadores em conjunto 
-    df["media"] = df["index_desc"] + df["index_rent"] 
+        #pegar os maiores rankinhgs conjuntos, ou seja as menores médias, da quantidade 'num' informada e a partir disso gerar uma carteira de ações
+        df_sorted = df_sorted.nsmallest(num,'media').reset_index(drop = True) 
+        df_sorted.index = df_sorted.index + 1 #para o ranking comçar no 1 e não no 0
+        logger.debug(f"Carteira gerada com {num} ações: {df_sorted['ticker'].tolist()}")
 
-    #ordenar a coluna média do menor para o maior 
-    df_sorted = df.sort_values(by=['media'], ascending=[True])
+        #criar uma lista das ações da carteira gerada: 
+        acoes_carteira = df_sorted['ticker'].tolist()  
+        logger.info("Função carteira finalizada com sucesso.")
 
-    #pegar os maiores rankinhgs conjuntos, ou seja as menores médias, da quantidade 'num' informada e a partir disso gerar uma carteira de ações
-    df_sorted = df_sorted.nsmallest(num,'media').reset_index(drop = True) 
-    df_sorted.index = df_sorted.index + 1 #para o ranking comçar no 1 e não no 0
-    
-    #criar uma lista das ações da carteira gerada: 
-    acoes_carteira = df_sorted['ticker'].tolist()  
-    return df_sorted, acoes_carteira
+        return df_sorted, acoes_carteira
 
+    except Exception as e:
+        logger.error(f"Ocorreu um erro na função carteira: {e}")
+        
 #carteira('2024-11-05', 'roe', 'earning_yield', 2)
 
 

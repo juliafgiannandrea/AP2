@@ -50,11 +50,12 @@ def render_grafico():
     if st.button("Gerar Gráficos"):
         if "Carteira de Ações" in graficos_opcoes:
             st.subheader("Carteira de Ações")
-            st.write(f"Variação do valor do fechamento da carteira formada pelas ações: {acoes_carteira}")
+            st.write(f"Variação do retorno da carteira formada pelas ações: {acoes_carteira}")
             df = menu_graficos(data_ini, data_fim, acoes_carteira)
        
         if "IBOV" in graficos_opcoes:
             st.subheader("IBOV")
+            st.write("Variação do retorno do Ibovespa")
             ibov = grafico_ibov(data_ini, data_fim)
 
 
@@ -64,7 +65,9 @@ def render_grafico():
             st.subheader("IBOV")
             df_ibov = pegar_df_preco_diversos(data_ini, data_fim)
             st.subheader("Comparativo: Carteira x IBOV")
+            st.write("Variação comparada do retorno da Carteira de Ações X Ibovespa")
             comparativo = comp(data_ini, data_fim, df_carteira, df_ibov)
+            
 
        
 
