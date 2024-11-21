@@ -13,9 +13,9 @@ from backend.routes import menu_estrategia
 #Exibição :
 def render_estrategia():
 
-    '''
-    Essa função renderiza a página que exibe a carteira de ações gerada a partir da análise de dois indicadores financeiros.
-    '''
+    """
+        Essa função renderiza a página que exibe a carteira de ações gerada a partir da análise de dois indicadores financeiros.
+    """
 
     st.header("📈 Estratégia de Análise de Ações")
     st.write("**Planeje sua estratégia:** Escolha indicadores financeiros para compor uma carteira de ações com base em análise de rentabilidade e desconto.")

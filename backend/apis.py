@@ -14,13 +14,10 @@ from dotenv import load_dotenv
 load_dotenv()
 
 #token: 
-#token = os.getenv("TOKEN")
-#if not token:
-    #logger.error("Token de acesso não encontrado no ambiente.")
-    #raise ValueError("Token de acesso não encontrado.")
-
-#token de acesso lab das finanças: COLOCAR NO .ENV 
-token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzMyNDQ4MDcyLCJqdGkiOiI5YjBlZjFmMzY4MTk0OGUzYjU3ZGM1ZGU3YmI5YTQ4YyIsInVzZXJfaWQiOjM5fQ.xaDuWahZonD9C0v-4zKLk6CEtNg9s8Ohp9hhoLU3qwA"
+token = os.getenv("TOKEN")
+if not token:
+    logger.error("Token de acesso não encontrado no ambiente.")
+    raise ValueError("Token de acesso não encontrado.")
 
 #Permissão de acesso: 
 headers = {'Authorization': 'JWT {}'.format(token)}
