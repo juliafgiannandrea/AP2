@@ -11,7 +11,12 @@ from backend.routes import menu_estrategia, menu_graficos, grafico_ibov, comp
 
 #Exibição 
 def render_grafico():
-    st.header("ANÁLISE DE GRÁFICOS")
+        
+    """
+        Essa função faz a exibição dos gráficos que podem ser gerados pelas funções que estão no script views.py    
+    """
+    
+    st.header(" 📊  ANÁLISE DE GRÁFICOS")
     st.write("Aqui você pode visualizar o gráfico correspondente a variação dos valores de fechamento das ações da carteira gerada na aba estratégia em relação ao decorrer do tempo.")
 
     #verificar se a lista das ações da carteira foi gerada e está no cache: 
@@ -54,21 +59,14 @@ def render_grafico():
 
 
         if "Comparativo Carteira x IBOV" in graficos_opcoes:
+            st.subheader("Carteira de Ações")
             df_carteira = pegar_df_preco_corrigido(data_ini, data_fim, acoes_carteira)
+            st.subheader("IBOV")
             df_ibov = pegar_df_preco_diversos(data_ini, data_fim)
             st.subheader("Comparativo: Carteira x IBOV")
             comparativo = comp(data_ini, data_fim, df_carteira, df_ibov)
-   
-    #se eu colocar isso aqui ele fica sempre aparecendo essa mensagem de erro
-    #else: 
-     #st.error("Não foi possível obter os dados. Verifique as datas ou ações selecionadas.")
 
-
-
-    
-   
- 
-#Exibição Ibovespa:       
+       
 
 
 

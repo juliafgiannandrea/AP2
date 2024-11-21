@@ -12,12 +12,18 @@ from backend.routes import menu_estrategia
 
 #Exibição :
 def render_estrategia():
-    st.header("Estratégia")
-    st.write("Estratégia para análises conjuntas levando em conta 2 indicadores financeiros: um de desconto e outro de rentabilidade com geração de carteira de ações composta por um número informado por você")
 
+    '''
+    Essa função renderiza a página que exibe a carteira de ações gerada a partir da análise de dois indicadores financeiros.
+    '''
+
+    st.header("📈 Estratégia de Análise de Ações")
+    st.write("**Planeje sua estratégia:** Escolha indicadores financeiros para compor uma carteira de ações com base em análise de rentabilidade e desconto.")
+    
+    st.sidebar.header("Configurações da Estratégia")
     #Input dos indicadores:
-    indicador_rent = st.sidebar.selectbox("Selecione o indicador de rentabilidade que você quer analisar", options=["roe", "roic", "roc"])
-    indicador_desc = st.sidebar.radio("Selecione o indicador de desconto que você quer analisar", options=["earning_yield", "dividend_yield", "p_vp"])
+    indicador_rent = st.sidebar.selectbox("Selecione o indicador de rentabilidade:", options=["roe", "roic", "roc"])
+    indicador_desc = st.sidebar.radio("Selecione o indicador de desconto:", options=["earning_yield", "dividend_yield", "p_vp"])
 
     #Input data e quantidade de ações (número) a serem analisadas: 
     data = st.sidebar.date_input("Selecione uma data", value=pd.to_datetime('today'))

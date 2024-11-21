@@ -13,9 +13,14 @@ from backend.routes import menu_planilhao
 
 #Estrutura - front
 def render_planilhao():
-    st.header("PLANILHÃO")
+    """
+
+    Essa função rendereiza a pagina que exibe a tabela planilhão.
+    
+    
+    """
+    st.header(" 📡  PLANILHÃO")
     st.write("""Aqui você visualiza os dados da tabela Planilhão, que contém dados de todas as ações num determinado dia.""")
-    st.write("OBS: Você não consegue visualizar os dados de hoje.")
 
     #Input de data:
     data_base = st.date_input("Selecione uma data", value=pd.to_datetime('today')) #today como valor padrão

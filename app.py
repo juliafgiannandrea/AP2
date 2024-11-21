@@ -19,7 +19,7 @@ from frontend.grafico_page import render_grafico
 from frontend.doc_page import render_doc
 
 # Título do app
-st.title("AP2 - PROJETOS EM CIÊNCIA DE DADOS I")
+st.title("PROJETO EM CIÊNCIA DE DADOS")
 
 
 # Definindo as páginas do app
@@ -32,7 +32,8 @@ pages = {
 
 
 # Menu de navegação
-pagina = st.sidebar.radio("Navegação", options=list(pages.keys()))
+pagina = st.sidebar.title("MENU")
+pagina = st.sidebar.radio("Escolha o que você quer visualizar",options=list(pages.keys()))
 
 
 # Renderizar a página correspondente

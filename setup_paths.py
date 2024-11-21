@@ -1,4 +1,4 @@
-#Para facilitar a importação de módulos dentro da estrutura do projeto 
+#Para facilitar a importação de módulos dentro da estrutura do projeto:
 
 import sys
 from pathlib import Path #manipulação de caminhos de arquivos 

@@ -12,7 +12,6 @@ from pathlib import Path #para manipulação de caminhos
 
 
 
-
 #varáveis que armazenam os caminhos dos diretórios backend e frontend  -->  Obter o diretório do arquivo atual e configurar o caminho
 
     #BASE_DIR: armazena o diretório onde o arquivo de configuração está localizado
