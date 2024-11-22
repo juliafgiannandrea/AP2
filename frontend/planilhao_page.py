@@ -6,7 +6,6 @@ import pandas as pd
 
 #Importação das outras funções criadas em outros arquivos: 
 from backend.views import pegar_df_planilhao, validar_data
-from backend.routes import menu_planilhao 
 
 
 #Estrutura - front
@@ -26,7 +25,7 @@ def render_planilhao():
 
     #apertar o botão de busca e executar a função menu_plnaulhão 
     if st.button("Buscar Dados"):
-        df = menu_planilhao(data_base)
+        df = pegar_df_planilhao(data_base)
         if not df.empty:
             st.dataframe(df, height=600, use_container_width=True) #determino o espaço que a tabela vai ocupar 
         else:

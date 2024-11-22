@@ -6,23 +6,12 @@ import logging
 import sys 
 import matplotlib.pyplot as plt
 import streamlit as st 
-
-
 logger = logging.getLogger(__name__)
-logging.basicConfig(
-    filename='app.log',  # Arquivo de log
-    level=logging.DEBUG,  # Definir o nível de log (DEBUG para tudo, INFO para mensagens gerais, ERROR para erros)
-    format='%(asctime)s - %(levelname)s - %(message)s'  # Formato das mensagens de log
-)
-
-logger = logging.getLogger()
 
 #Importar as funções criadas no outro arquivo, as que pegam as APIs 
 from backend.apis import(pegarPlanilhao,
                           get_preco_corrigido,
                           get_preco_diversos)
-
-
 
 #Processamento e consulta dos dados do planilhão: seleção das 4 primeiras letras do ticker 
 
@@ -127,29 +116,23 @@ def carteira(data, indicador_rent, indicador_desc, num):
         else: 
             df = df.nlargest(len(df),indicador_desc).reset_index(drop=True)
         df['index_desc'] = df.index #coluna index top indicador de desconto
-        logger.debug("Classificação de rentabilidade realizada.")
+        logger.info("Classificação de rentabilidade realizada.")
         #criação da coluna média que é o ranking novo ranking dos dois indicadores em conjunto 
         df["media"] = df["index_desc"] + df["index_rent"] 
-        logger.debug("Coluna média criada.")
+        logger.info("Coluna média criada.")
         #ordenar a coluna média do menor para o maior 
         df_sorted = df.sort_values(by=['media'], ascending=[True])
 
         #pegar os maiores rankinhgs conjuntos, ou seja as menores médias, da quantidade 'num' informada e a partir disso gerar uma carteira de ações
         df_sorted = df_sorted.nsmallest(num,'media').reset_index(drop = True) 
         df_sorted.index = df_sorted.index + 1 #para o ranking comçar no 1 e não no 0
-        logger.debug(f"Carteira gerada com {num} ações: {df_sorted['ticker'].tolist()}")
-
-        #criar uma lista das ações da carteira gerada: 
-        acoes_carteira = df_sorted['ticker'].tolist()  
+        logger.info(f"Carteira gerada com {num} ações: {df_sorted['ticker'].tolist()}")
         logger.info("Função carteira finalizada com sucesso.")
-
-        return df_sorted, acoes_carteira
+        return df_sorted
 
     except Exception as e:
         logger.error(f"Ocorreu um erro na função carteira: {e}")
         
-#carteira('2024-11-05', 'roe', 'earning_yield', 2)
-
 
 #quero puxar a variável acoes_carteira da função acima para ela entrar como parametro da minha função abaixo  _ usei o cache 
 def pegar_df_preco_corrigido(data_ini, data_fim, acoes_carteira) -> pd.DataFrame:
@@ -165,13 +148,10 @@ def pegar_df_preco_corrigido(data_ini, data_fim, acoes_carteira) -> pd.DataFrame
     df_preco_grouped (pd.DataFrame): dataframe com o retorno das ações na carteira de acordo com a data 
     gráfico da variação do retorno da carteira (eixo y) por data (eixo x).
     """ 
-   
     df_preco = pd.DataFrame() #crio dataframe
-
     try:
         for ticker in acoes_carteira:
             dados = get_preco_corrigido(ticker, data_ini, data_fim) #para cada ação presente na carteira gerada acima eu execito a função get_preco_corrigido, que é a função que pega a API
-        
             if dados and 'dados' in dados: 
                 df_temp = pd.DataFrame.from_dict(dados['dados'])  # Converte os dados num df temporário
                 df_preco = pd.concat([df_preco, df_temp], axis=0, ignore_index=True) #não entendi do porque criar um data frame temporário e depois concatená-lo. 
@@ -182,47 +162,13 @@ def pegar_df_preco_corrigido(data_ini, data_fim, acoes_carteira) -> pd.DataFrame
                 print(f"Sem Preço Corrigido: {ticker}")
     except Exception as e:
         logger.error(f"Erro ao processar {ticker}: {e}")
-
-
     col_interesse = ['ticker', 'abertura','fechamento', 'data'] #são as colunas que vou usar para gerar o gráfico 
     df_preco['data'] = pd.to_datetime(df_preco['data']) #garantir que a data esteja no formato de data (type)
     df_preco = df_preco[col_interesse]
-    #print(df_preco) #nome da ação, valor de fechamento e data 
-
-    #abertura e fechamento para cada dia para ação:
-    #abertura_carteira = df_preco["abertura"]
-    fechamento_carteira = df_preco["fechamento"]
-    
-    #porc_carteira = (100/(len(acoes_carteira)))/100  
-    #retorno  = ((fechamento_carteira - abertura_carteira)/abertura_carteira)*porc_carteira
-    #df_preco["retorno"] = retorno
-
     #somar todos os valores de retorno de cada ação num mesmo dia --- vou ter valores de fechamento da carteira no dia 
     df_preco_grouped = df_preco.groupby("data")["fechamento"].sum().reset_index()
-
-    # Criar o gráfico com os valores de retorno de cada dia da carteira  
-    plt.figure(figsize=(10, 7))
-    plt.plot(df_preco_grouped['data'], df_preco_grouped['fechamento'], linestyle='-', color='green', label='Fechamento da Carteira')
-
-    # Personalização do gráfico
-    plt.title('Fechamento da Carteira de Ações por Data')
-    plt.xlabel('Data')
-    plt.ylabel('Fechamento')
-    plt.xticks(rotation=45)  # Rotaciona as datas para melhor visualização
-    plt.grid(True)
-    plt.legend()
-
-    # Ajustar o layout do gráfico
-    plt.tight_layout()  
-
-    print(f"Foram utilizadas para a análise as ações: {acoes_carteira}")
-    plt.show()
-    st.pyplot(plt)
-
     return df_preco_grouped #é um data frame com as datas e os valores da soma do fechamento 
     #return df_preco > data frame de cada dia das ações indiviuais com seus valores de abertura,fechamento e retorno 
-
-#pegar_df_preco_corrigido('2024-01-04', '2024-01-10',  ['VBBR3', 'WIZC3'])
 
 #preços diversos é uma tabela utilizada para análise do ibovespa:
 def pegar_df_preco_diversos(data_ini:date, data_fim:date) -> pd.DataFrame:
@@ -238,7 +184,6 @@ def pegar_df_preco_diversos(data_ini:date, data_fim:date) -> pd.DataFrame:
     df_preco (pd.DataFrame): dataframe com os preços do período dos ativos da lista
     gráfico com a variação dos valores de retorno do ibovespa (eixo y) por data (eixo x)
     """
-
     df_preco = pd.DataFrame()
     dados = get_preco_diversos(data_ini, data_fim, 'ibov')
     if dados:
@@ -250,81 +195,8 @@ def pegar_df_preco_diversos(data_ini:date, data_fim:date) -> pd.DataFrame:
     else:
         logger.error("Sem Preco Corrigido: ibov")
         print("Sem Preco Corrigido: ibov")
-
     df_preco['data'] = pd.to_datetime(df_preco['data'])
-    #ibov_abertura = df_preco["abertura"]
-    ibov_fechamento = df_preco["fechamento"]
-    #retorno_ibov = ((ibov_fechamento - ibov_abertura)/ibov_abertura)
-    #df_preco["retorno"] = retorno_ibov
-       
-    #Criação do gráfico: 
-
-    plt.figure(figsize=(10, 7))
-    plt.plot(df_preco['data'], df_preco['fechamento'], linestyle='-', color='red', label='Fechamento ibov')
-
-    # Personalização do gráfico
-    plt.title('Fechamento do Ibovespa por Data')
-    plt.xlabel('Data')
-    plt.ylabel('Valores de Fechamento do Ibovespa')
-    plt.grid(True)
-    plt.legend()
-    plt.xticks(rotation=45)
-
-    # Ajustar o layout do gráfico
-    plt.tight_layout()  
-
-    plt.show()
-    st.pyplot(plt)
-
     return df_preco
-
-#pegar_df_preco_diversos('2024-01-04', '2024-01-10')
-
-
-
-#Para fazer o gráfico conjunto 
-def comp_ibov_carteira(data_ini: date, data_fim: date, df_carteira, df_ibov):
-    """
-    Função que faz o gráfico conjunto do Ibovespa com a carteira de ações para comparação entre ambos.
-
-    param:
-    data_ini (data):
-    data_fim (data): 
-    df_carteira (pd.DataFrame): 
-    df_ibov (pd.DataFrame): 
-
-    return:
-    gráfico com 2 linhas: uma da carteira outra do ibovespa. 
-    Eixo x é a variação das datas no período estabelecido e eixo y os valores de retorno do ibov e da carteira de ações. 
-    """
-
-    fig, ax1 = plt.subplots(figsize=(10, 7))
-
-    # Gráfico para os dados da carteira
-    ax1.plot(df_carteira['data'], df_carteira['fechamento'], color='green', label='Carteira')
-    ax1.set_xlabel('Data')
-    ax1.set_ylabel('Valores de fechamento da Carteira', color='green')
-    ax1.tick_params(axis='y', labelcolor='green')
-
-    # Adiciona o segundo eixo y para os dados do Ibovespa
-    ax2 = ax1.twinx()
-    ax2.plot(df_ibov['data'], df_ibov['fechamento'], color='red', label='Ibovespa')
-    ax2.set_ylabel('Valores de fechamento do Ibovespa', color='red')
-    ax2.tick_params(axis='y', labelcolor='red')
-
-    # Título e grade
-    plt.title('Fechamento da Carteira de Ações X Ibovespa por Data')
-    ax1.grid(True)
-
-    # Adiciona legendas de forma combinada
-    fig.legend(loc="upper left", bbox_to_anchor=(0.1, 0.9))
-
-    # Ajustar o layout
-    plt.tight_layout()
-
-    # Exibir o gráfico
-    plt.show()
-    st.pyplot(fig)
 
 
 

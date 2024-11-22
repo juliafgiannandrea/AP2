@@ -7,10 +7,6 @@ import pandas as pd
 import setup_paths
 import streamlit as st
 
-# Obter o diretório do arquivo atual e configurar o caminho
-BASE_DIR = Path(__file__).parent.parent.resolve()
-sys.path.append(str(BASE_DIR))
-
 # Importando as funções de renderização (exibição - frontend)
 from frontend.planilhao_page import render_planilhao
 from frontend.estrategia_page import render_estrategia
