@@ -15,7 +15,6 @@ sys.path.append(str(BACK_DIR))
 
 print(sys.path)
 
-
 #cada diretório é convertido para uma string e adicionado ao sys path
 #permite que qualquer módulo ou pacote nesses diretórios seja importado de qualquer lugar no código do projeto. Isso facilita o uso de módulos internos do projeto sem precisar especificar caminhos relativos complexos.
 #facilita a organização do código em módulos separados. 
