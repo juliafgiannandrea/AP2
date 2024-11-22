@@ -4,7 +4,6 @@
 import requests
 import pandas as pd 
 import os
-import streamlit as st
 #Logging:
 import logging
 logger = logging.getLogger(__name__) 
@@ -22,7 +21,7 @@ if not token:
 
 
 #Permissão de acesso: 
-headers = {'Authorization': f'JWT {token}'}
+headers = {'Authorization': 'JWT {}'.format(token)}
 
 #função para pegar a API do planilhão: 
 def pegarPlanilhao(data):
