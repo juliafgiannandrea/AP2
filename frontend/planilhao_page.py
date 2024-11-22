@@ -9,8 +9,6 @@ from backend.views import pegar_df_planilhao, validar_data
 from backend.routes import menu_planilhao 
 
 
-
-
 #Estrutura - front
 def render_planilhao():
     """
