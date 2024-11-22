@@ -15,13 +15,10 @@ load_dotenv()
 
 #token: desse jeito para rodar no streamlit (st.secrets)
 
-#token = os.getenv("TOKEN")
-token = st.secrets["token"]
+token = os.getenv("token")
 if not token:
     logger.error("Token de acesso não encontrado no ambiente.")
     raise ValueError("Token de acesso não encontrado.")
-
-#TOKEN = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzMyNDQ4MDcyLCJqdGkiOiI5YjBlZjFmMzY4MTk0OGUzYjU3ZGM1ZGU3YmI5YTQ4YyIsInVzZXJfaWQiOjM5fQ.xaDuWahZonD9C0v-4zKLk6CEtNg9s8Ohp9hhoLU3qwA"
 
 #Permissão de acesso: 
 headers = {'Authorization': 'JWT {}'.format(token)}
