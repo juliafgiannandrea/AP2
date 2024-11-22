@@ -1,4 +1,4 @@
-# Streamlit Finance: Visualização e Análise de Indicadores para Seleção de Ações
+# Streamlit Finance: Visualização e Análise de Indicadores para Seleção de Ações e Geração de Gráficos
 
 Uma ferramenta interativa para análise e visualização de dados financeiros, que permite a comparação de ações baseada em indicadores de rentabilidade e desconto.
 
