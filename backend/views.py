@@ -168,17 +168,20 @@ def pegar_df_preco_corrigido(data_ini, data_fim, acoes_carteira) -> pd.DataFrame
    
     df_preco = pd.DataFrame() #crio dataframe
 
-    for ticker in acoes_carteira:
-        dados = get_preco_corrigido(ticker, data_ini, data_fim) #para cada ação presente na carteira gerada acima eu execito a função get_preco_corrigido, que é a função que pega a API
-       
-        if dados and 'dados' in dados: 
-            df_temp = pd.DataFrame.from_dict(dados['dados'])  # Converte os dados num df temporário
-            df_preco = pd.concat([df_preco, df_temp], axis=0, ignore_index=True) #não entendi do porque criar um data frame temporário e depois concatená-lo. 
-            logger.info(f'{ticker} finalizado!')
-            print(f'{ticker} finalizado!')
-        else:
-            logger.error(f"Sem Preço Corrigido: {ticker}")
-            print(f"Sem Preço Corrigido: {ticker}")
+    try:
+        for ticker in acoes_carteira:
+            dados = get_preco_corrigido(ticker, data_ini, data_fim) #para cada ação presente na carteira gerada acima eu execito a função get_preco_corrigido, que é a função que pega a API
+        
+            if dados and 'dados' in dados: 
+                df_temp = pd.DataFrame.from_dict(dados['dados'])  # Converte os dados num df temporário
+                df_preco = pd.concat([df_preco, df_temp], axis=0, ignore_index=True) #não entendi do porque criar um data frame temporário e depois concatená-lo. 
+                logger.info(f'{ticker} finalizado!')
+                print(f'{ticker} finalizado!')
+            else:
+                logger.error(f"Sem Preço Corrigido: {ticker}")
+                print(f"Sem Preço Corrigido: {ticker}")
+    except Exception as e:
+        logger.error(f"Erro ao processar {ticker}: {e}")
 
 
     col_interesse = ['ticker', 'abertura','fechamento', 'data'] #são as colunas que vou usar para gerar o gráfico 

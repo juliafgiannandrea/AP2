@@ -17,7 +17,7 @@ def render_planilhao():
     Essa função rendereiza a pagina que exibe a tabela planilhão.
     """
     st.header(" 📡  PLANILHÃO")
-    st.write("""Aqui você visualiza os dados da tabela Planilhão, que contém dados de todas as ações num determinado dia.""")
+    st.write("""Aqui você visualiza a tabela Planilhão, que contém dados de todas as ações num determinado dia.""")
 
     #Input de data:
     data_base = st.date_input("Selecione uma data", value=pd.to_datetime('today')) #today como valor padrão

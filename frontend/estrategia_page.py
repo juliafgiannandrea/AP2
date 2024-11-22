@@ -18,12 +18,12 @@ def render_estrategia():
     """
 
     st.header("📈 Estratégia de Análise de Ações")
-    st.write("**Planeje sua estratégia:** Escolha indicadores financeiros para compor uma carteira de ações com base em análise de rentabilidade e desconto.")
+    st.write("**Planeje sua estratégia:** Com base em 2 indicadores financeiros gere uma carteira de ações.")
     
     st.sidebar.header("Configurações da Estratégia")
     #Input dos indicadores:
     indicador_rent = st.sidebar.selectbox("Selecione o indicador de rentabilidade:", options=["roe", "roic", "roc"])
-    indicador_desc = st.sidebar.radio("Selecione o indicador de desconto:", options=["earning_yield", "dividend_yield", "p_vp"])
+    indicador_desc = st.sidebar.selectbox("Selecione o indicador de desconto:", options=["earning_yield", "dividend_yield", "p_vp"])
 
     #Input data e quantidade de ações (número) a serem analisadas: 
     data = st.sidebar.date_input("Selecione uma data", value=pd.to_datetime('today'))

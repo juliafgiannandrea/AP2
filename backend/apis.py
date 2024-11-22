@@ -4,7 +4,7 @@
 import requests
 import pandas as pd 
 import os
-
+import streamlit as st
 #Logging:
 import logging
 logger = logging.getLogger(__name__) 
@@ -13,14 +13,16 @@ logger = logging.getLogger(__name__)
 from dotenv import load_dotenv
 load_dotenv()
 
-#token: 
+#token: desse jeito para rodar no streamlit
+
 token = os.getenv("TOKEN")
 if not token:
     logger.error("Token de acesso não encontrado no ambiente.")
     raise ValueError("Token de acesso não encontrado.")
 
+
 #Permissão de acesso: 
-headers = {'Authorization': 'JWT {}'.format(token)}
+headers = {'Authorization': f'JWT {token}'}
 
 #função para pegar a API do planilhão: 
 def pegarPlanilhao(data):

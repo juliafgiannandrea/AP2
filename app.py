@@ -33,7 +33,7 @@ pages = {
 
 # Menu de navegação
 pagina = st.sidebar.title("MENU")
-pagina = st.sidebar.radio("Escolha o que você quer visualizar",options=list(pages.keys()))
+pagina = st.sidebar.radio("Escolha a aba que você quer visualizar",options=list(pages.keys()))
 
 
 # Renderizar a página correspondente

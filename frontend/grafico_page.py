@@ -17,7 +17,7 @@ def render_grafico():
     """
     
     st.header(" 📊  ANÁLISE DE GRÁFICOS")
-    st.write("Aqui você pode visualizar o gráfico correspondente a variação dos valores de fechamento das ações da carteira gerada na aba estratégia em relação ao decorrer do tempo.")
+    st.write("Aqui você pode visualizar o gráfico que mostra a variação dos valores de retorno das ações da carteira gerada na aba Estratégia ao longo do tempo, bem como a variação do retorno do Ibovespa num determinado período. Em seguida, é possível comparar essas duas variações num gráfico só.")
 
     #verificar se a lista das ações da carteira foi gerada e está no cache: 
     if 'acoes_carteira' not in st.session_state:
