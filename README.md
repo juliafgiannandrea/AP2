@@ -93,8 +93,7 @@ Este é um trabalho desenvolvido pelos alunos de Ciência de Dados do Ibmec - DF
 
 🐈 GitHub: pedrocadaluz
 
-🔗 LinkedIn: Pedro Arthur da Luz Miranda¬¬
-
+🔗 LinkedIn: Pedro Arthur da Luz Miranda
 
 
 
