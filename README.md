@@ -63,37 +63,10 @@ Após isso, a aplicação estará disponível no navegador no endereço padrão:
 ## 🌟 Conclusão
 Com este projeto, você pode analisar ações de forma intuitiva e comparar seus desempenhos com base nos principais indicadores financeiros. Com a geração de gráficos claros e informativos, fica mais fácil compreender e visualizar os dados. Explore, analise e tome decisões mais embasadas! 🚀
 
-## Colaboradores 
-
-Este é um trabalho desenvolvido pelos alunos de Ciência de Dados do Ibmec - DF. 
-
-👩💻 Alunos responsáveis pelo projeto:
-
-### 🚀 Emanuel Marques Pereira
-
-📧 Email: emanuelaluno.ti@gmail.com
-
-🐈 GitHub: emanuelmarqs
-
-🔗 LinkedIn: Emanuel Marques
 
 
-### 🌟 Júlia Félix Giannandrea
-
-📧 Email: juliafgiannandrea@gmail.com
-
-🐈 GitHub: juliafgiannandrea
-
-🔗 LinkedIn: Júlia Félix Giannandrea
 
 
-### 🚀 Pedro Arthur da Luz Miranda
-
-📧 Email: pedrocadaluz@gmail.com
-
-🐈 GitHub: pedrocadaluz
-
-🔗 LinkedIn: Pedro Arthur da Luz Miranda
 
 
 
